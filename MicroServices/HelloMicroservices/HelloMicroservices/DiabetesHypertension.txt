@@ -1,0 +1,68 @@
+
+Hyper + Diabetes Set2 (109993)
+
+select distinct DIM_MEMBER.MEMBER_KEY from FACT_SERVICES as FACT_SERVICES 
+join DIM_DATE as DIM_DATE on ( FACT_SERVICES.DATE_INCURRED_KEY = DIM_DATE.DATE_INT ) 
+join DIM_DIAGNOSIS_ICD as DIM_DIAGNOSIS_ICD_01 on ( FACT_SERVICES.ICD_DIAG_01_KEY = DIM_DIAGNOSIS_ICD_01.ICD_DIAG_KEY ) 
+join DIM_DIAGNOSIS_ICD as DIM_DIAGNOSIS_ICD_02 on ( FACT_SERVICES.ICD_DIAG_02_KEY = DIM_DIAGNOSIS_ICD_02.ICD_DIAG_KEY ) 
+join DIM_MEMBER as DIM_MEMBER on ( FACT_SERVICES.MEMBER_KEY = DIM_MEMBER.MEMBER_KEY )  
+where ( DIM_DATE.CAL_YR_NAME = @condition_0 
+       and ( DIM_DIAGNOSIS_ICD_01.ICD_DIAG_ROLLUP_DESC in ( @condition_1_0_v0, @condition_1_0_v1 ) or DIM_DIAGNOSIS_ICD_02.ICD_DIAG_ROLLUP_DESC not in ( @condition_1_1_v0, @condition_1_1_v1 ) ) 
+	   and ( DIM_DIAGNOSIS_ICD_01.ICD_DIAG_ROLLUP_DESC in ( @condition_2_0_v0, @condition_2_0_v1 ) or DIM_DIAGNOSIS_ICD_02.ICD_DIAG_ROLLUP_DESC not in ( @condition_2_1_v0, @condition_2_1_v1 ) ) 
+	  )
+
+"@condition_0" {2013}
+"@condition_1_0_v0" {Diabetes mellitus with complications}
+"@condition_1_0_v1" {Diabetes mellitus without complication}
+"@condition_1_1_v0" {Diabetes mellitus with complications}
+"@condition_1_1_v1" {Diabetes mellitus without complication}
+"@condition_2_0_v0" {Essential hypertension}
+"@condition_2_0_v1" {Hypertension with complications and secondary hypertension}
+"@condition_2_1_v0" {Essential hypertension}
+"@condition_2_1_v1" {Hypertension with complications and secondary hypertension}
+
+
+Hyper (110028)
+
+
+select distinct DIM_MEMBER.MEMBER_KEY from FACT_SERVICES as FACT_SERVICES 
+join DIM_DATE as DIM_DATE on ( FACT_SERVICES.DATE_INCURRED_KEY = DIM_DATE.DATE_INT ) 
+join DIM_DIAGNOSIS_ICD as DIM_DIAGNOSIS_ICD_01 on ( FACT_SERVICES.ICD_DIAG_01_KEY = DIM_DIAGNOSIS_ICD_01.ICD_DIAG_KEY ) 
+join DIM_DIAGNOSIS_ICD as DIM_DIAGNOSIS_ICD_02 on ( FACT_SERVICES.ICD_DIAG_02_KEY = DIM_DIAGNOSIS_ICD_02.ICD_DIAG_KEY ) 
+join DIM_MEMBER as DIM_MEMBER on ( FACT_SERVICES.MEMBER_KEY = DIM_MEMBER.MEMBER_KEY )  
+where ( DIM_DATE.CAL_YR_NAME = @condition_0 and 
+        ( DIM_DIAGNOSIS_ICD_01.ICD_DIAG_ROLLUP_DESC in ( @condition_1_0_v0, @condition_1_0_v1 ) or DIM_DIAGNOSIS_ICD_02.ICD_DIAG_ROLLUP_DESC not in ( @condition_1_1_v0, @condition_1_1_v1 ) ) )
+
+
+"@condition_0" {2013}
+"@condition_1_0_v0" {Essential hypertension}
+"@condition_1_0_v1" {Hypertension with complications and secondary hypertension}
+"@condition_1_1_v0" {Essential hypertension}
+"@condition_1_1_v1" {Hypertension with complications and secondary hypertension}
+
+
+
+
+Diabetes (110068)
+
+select distinct DIM_MEMBER.MEMBER_KEY from FACT_SERVICES as FACT_SERVICES 
+join DIM_DATE as DIM_DATE on ( FACT_SERVICES.DATE_INCURRED_KEY = DIM_DATE.DATE_INT ) 
+join DIM_DIAGNOSIS_ICD as DIM_DIAGNOSIS_ICD_01 on ( FACT_SERVICES.ICD_DIAG_01_KEY = DIM_DIAGNOSIS_ICD_01.ICD_DIAG_KEY ) 
+join DIM_DIAGNOSIS_ICD as DIM_DIAGNOSIS_ICD_02 on ( FACT_SERVICES.ICD_DIAG_02_KEY = DIM_DIAGNOSIS_ICD_02.ICD_DIAG_KEY ) 
+join DIM_MEMBER as DIM_MEMBER on ( FACT_SERVICES.MEMBER_KEY = DIM_MEMBER.MEMBER_KEY )  
+where ( DIM_DATE.CAL_YR_NAME = @condition_0 
+        and ( DIM_DIAGNOSIS_ICD_01.ICD_DIAG_ROLLUP_DESC in ( @condition_1_0_v0, @condition_1_0_v1 ) or DIM_DIAGNOSIS_ICD_02.ICD_DIAG_ROLLUP_DESC not in ( @condition_1_1_v0, @condition_1_1_v1 ) ) 
+	   )
+
+"@condition_0" {2013}
+"@condition_1_0_v0"  {Diabetes mellitus with complications}
+"@condition_1_0_v1" {Diabetes mellitus without complication}
+"@condition_1_1_v0" {Diabetes mellitus without complication}
+"@condition_1_1_v1" {Diabetes mellitus with complications}
+
+
+
+Intersect Hyper and Diabetes 
+
+
+"select COUNT(DISTINCT DIM_MEMBER.MEMBER_ID) from DIM_MEMBER as DIM_MEMBER inner join ( ( select entity_key from usr.population_detail where population_id = @set103877 ) intersect ( select entity_key from usr.population_detail where population_id = @set103876 ) ) as keys on ( DIM_MEMBER.MEMBER_KEY = keys.entity_key )"
